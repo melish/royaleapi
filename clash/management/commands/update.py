@@ -97,6 +97,17 @@ class Command(BaseCommand):
             player.lastSeen = parse_date(member["lastSeen"])
             player.save()
 
+        # remove members no longer here
+        Player.objects.filter(
+            clan=clan,
+        ).exclude(
+            tag__in=players.keys(),
+        ).update(
+            clan=None,
+            clanRank=999,
+            role='',
+        )
+
         # to store number of misses for last 10 wars
         # key=player tag, value = {'misses': x, 'warCount': y}
         globalstats = defaultdict(lambda: defaultdict(int))
