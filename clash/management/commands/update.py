@@ -95,6 +95,8 @@ class Command(BaseCommand):
             for attr in attrs:
                 setattr(player, attr, member[attr])
             player.lastSeen = parse_date(member["lastSeen"])
+            if created:
+                player.created_at = player.lastSeen
             player.save()
 
         # remove members no longer here

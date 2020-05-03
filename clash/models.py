@@ -66,17 +66,16 @@ class Player(models.Model):
         for w in self.warstats_set.all():
             wins += w.wins
             total += w.numberOfBattles
-        return int(100 * wins / total) if total > 0 else "-"
+        return "{}%".format(int(100 * wins / total)) if total > 0 else "-"
 
     @property
     def collect_ratio(self):
         return (
             int(
-                100
+                10
                 * sum(w.collectionDayBattlesPlayed for w in self.warstats_set.all())
-                / 3
                 / self.wars.count()
-            )
+            ) / 10
             if self.wars.count() > 0
             else "-"
         )
@@ -97,7 +96,17 @@ class Player(models.Model):
     def age(self):
         now = datetime.utcnow().replace(tzinfo=utc)
         delta = now - self.created_at
-        return delta.days
+        return int(10*delta.total_seconds()/3600/24)/10
+
+    @property
+    def age_str(self):
+        now = datetime.utcnow().replace(tzinfo=utc)
+        delta = now - self.created_at
+        if delta.days > 3:
+            return f"{delta.days}d"
+
+        hours = int(delta.seconds/3600)
+        return f"{delta.days}d {hours}h"
 
     @property
     def donation_ratio(self):
