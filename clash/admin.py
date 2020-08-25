@@ -66,7 +66,7 @@ class PlayerAdmin(admin.ModelAdmin):
             obj.idle_days > 4
         )
         good_marker = (
-            obj.role == 'member' and obj.donations > 300 or
+            obj.role == 'member' and obj.donations > 330 or
             obj.role not in ('leader', 'coLeader') and obj.warCount >= 9
         )
         return format_html(

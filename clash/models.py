@@ -110,7 +110,10 @@ class Player(models.Model):
 
     @property
     def donation_ratio(self):
-        return self.donations - self.donationsReceived
+        return "{} / {}".format(
+            self.donations - self.donationsReceived,
+            self.donations
+        )
 
     def __str__(self):
         return "%s (%s)" % (self.name, self.tag)

@@ -2,8 +2,8 @@ import logging
 import json
 import requests
 import os
-from datetime import datetime
 
+from datetime import datetime, timedelta
 from collections import defaultdict
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
@@ -158,8 +158,10 @@ class Command(BaseCommand):
                         )
                     },
                 )
-                globalstats[tag]["created_at"] = min(war_date, player.created_at)
-                globalstats[tag]["lastSeen"] = (
+                globalstats[tag]["created_at"] = player.created_at = min(
+                    war_date - timedelta(days=2), player.created_at
+                )
+                globalstats[tag]["lastSeen"] = player.lastSeen = (
                     max(war_date, player.lastSeen) if player.lastSeen else war_date
                 )
                 globalstats[tag]["warMisses"] += (
